@@ -1,5 +1,5 @@
 {
-  "name": "wazum/sluggi",
+  "name": "udes/sluggi",
   "license": "GPL-3.0",
   "description": "The little TYPO3 slug helper",
   "require": {
