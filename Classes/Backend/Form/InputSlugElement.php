@@ -14,7 +14,6 @@ use Wazum\Sluggi\Helper\SlugHelper as SluggiSlugHelper;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Versioning\VersionState;
-use TYPO3\CMS\Redirects\Repository\RedirectRepository;
 
 /**
  * Class InputSlugElement
