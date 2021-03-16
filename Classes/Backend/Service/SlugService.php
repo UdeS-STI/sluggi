@@ -82,7 +82,9 @@ class SlugService extends \TYPO3\CMS\Redirects\Service\SlugService
             if ($this->autoUpdateSlugs) {
                 $this->checkSubPages($currentPageRecord, $currentSlug, $newSlug);
             }
-            $this->sendNotification();
+            if($GLOBALS['BE_USER']->isAdmin()) {
+              $this->sendNotification();
+            }
 
             GeneralUtility::makeInstance(RedirectCacheService::class)->rebuild();
         }
