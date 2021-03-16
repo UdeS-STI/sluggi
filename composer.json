@@ -1,11 +1,14 @@
 {
-  "name": "wazum/sluggi",
+  "name": "udes/sluggi",
   "license": "GPL-3.0",
   "description": "The little TYPO3 slug helper",
   "require": {
     "php": ">=7.2.0",
     "ext-libxml": "*",
     "ext-dom": "*"
+  },
+  "require-dev": {
+    "helmich/typo3-typoscript-lint": "^2.1"
   },
   "suggest": {
     "typo3/cms-core": "^10.4",
