@@ -7,6 +7,7 @@ namespace Wazum\Sluggi\Backend\Form;
 use DOMDocument;
 use DOMNode;
 use DOMXPath;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Redirects\Repository\Demand;
 use Wazum\Sluggi\Helper\Configuration;
 use Wazum\Sluggi\Helper\PermissionHelper;
@@ -35,33 +36,18 @@ class InputSlugElement extends \TYPO3\CMS\Backend\Form\Element\InputSlugElement
             return $result;
         }
 
-        $context = GeneralUtility::makeInstance(Context::class);
-        if( $context->getPropertyFromAspect('workspace', 'isOffline') ) {
-            if ($this->data['databaseRow']['t3ver_state'] !== VersionState::NEW_PLACEHOLDER_VERSION) {
-                $result['html'] = "<p>Cette page a déjà été publiée, il n'est donc pas possible de modifier le segment d'URL
-                    en WEBDEV (Espace de travail de révision)</p><p> URL publié: " . $this->data['databaseRow']['slug'] ."</p>";
-                return $result;
-            }
-
-            $demand = new Demand(1, '', $this->data['databaseRow']['slug']);
-            $redirectRepository = GeneralUtility::makeInstance(RedirectRepository::class, $demand);
-            $redirects = $redirectRepository->findRedirectsByDemand();
-            if( count($redirects) > 0 ) {
-                $result['html'] = "<p>Attention, des redirections existes qui créeront des conflits avec cette page.
-                    Veuillez faire une demande pour supprimer ces redirections OU changer  le segment d'URL avant de publier la page.</p>" . $result['html'];
-                return $result;
-            }
-        } else {
-            $demand = new Demand(1, '', $this->data['databaseRow']['slug']);
-            $redirectRepository = GeneralUtility::makeInstance(RedirectRepository::class, $demand);
-            $redirects = $redirectRepository->findRedirectsByDemand();
-            if( count($redirects) > 0 ) {
-              $result['html'] = "<p>Attention, des redirections existes qui créeront des conflits avec cette page.
-                      Veuillez faire une demande pour supprimer ces redirections.</p>" . $result['html'];
-              return $result;
-            }
-            if( ! $GLOBALS['BE_USER']->isAdmin()) {
-               $result['html'] = "<p>Attention, modifier le segment d'URL créera automatiquement des redirections et ajustera le segment d'URL des sous-pages. Avant de changer ce champ, veuillez lire la <a style='text-decoration: underline;'>documentation</a>.</p>" . $result['html'];
+        $readonlySlugOnOfflineWorspace = (bool)Configuration::get('readonly_slug_offline_workspace');
+        if( $readonlySlugOnOfflineWorspace ) {
+            $context = GeneralUtility::makeInstance(Context::class);
+            if( $context->getPropertyFromAspect('workspace', 'isOffline') ) {
+                if ($this->data['databaseRow']['t3ver_state'] !== VersionState::NEW_PLACEHOLDER_VERSION) {
+                    $languageService = $this->getLanguageService();
+                    $languageFile = 'LLL:EXT:sluggi/Resources/Private/Language/locallang.xlf';
+                    $messagePagePublished = $languageService->sL($languageFile .':message.pagePublishedSlugReadonly');
+                    $messagePublishedSlug = $languageService->sL($languageFile .':message.publishedSlug');
+                    $result['html'] = "<p>$messagePagePublished</p><p>$messagePublishedSlug: " . $this->data['databaseRow']['slug'] ."</p>";
+                    return $result;
+                }
             }
         }
 
@@ -144,5 +130,13 @@ class InputSlugElement extends \TYPO3\CMS\Backend\Form\Element\InputSlugElement
             ],
             $html
         );
+    }
+
+    /**
+     * @return LanguageService
+     */
+    protected function getLanguageService(): LanguageService
+    {
+      return $GLOBALS['LANG'];
     }
 }
