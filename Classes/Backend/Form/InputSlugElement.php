@@ -8,7 +8,6 @@ use DOMDocument;
 use DOMNode;
 use DOMXPath;
 use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Redirects\Repository\Demand;
 use Wazum\Sluggi\Helper\Configuration;
 use Wazum\Sluggi\Helper\PermissionHelper;
 use Wazum\Sluggi\Helper\SlugHelper as SluggiSlugHelper;
