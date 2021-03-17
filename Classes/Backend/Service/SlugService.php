@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
 use TYPO3\CMS\Core\Routing\PageRouter;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Redirects\Service\RedirectCacheService;
+use Wazum\Sluggi\Helper\Configuration;
 use function rtrim;
 
 /**
