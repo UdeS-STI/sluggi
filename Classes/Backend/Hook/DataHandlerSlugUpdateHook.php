@@ -78,6 +78,12 @@ class DataHandlerSlugUpdateHook
         if (isset($incomingFieldArray['tx_sluggi_sync']) && (bool)$incomingFieldArray['tx_sluggi_sync'] === false) {
             $synchronize = false;
         }
+
+        // Afin de gérer le déplacement de page (dans ce cas il n'y a pas de 'title') il ne faut pas faire le traitement ci-bas.
+        if( ! isset($incomingFieldArray['title'])) {
+            return;
+        }
+
         if ($synchronize) {
             $record = BackendUtility::getRecordWSOL($table, (int)$id);
             $data = array_merge($record, $incomingFieldArray);
