@@ -69,8 +69,9 @@ class DatamapHook
 
     protected function updateSlugForMovedPage(int $id, int $targetId, DataHandler $dataHandler): void
     {
-        $currentPage = BackendUtility::getRecord('pages', $id, 'uid, slug, sys_language_uid');
-        if (!empty($currentPage)) {
+        $PLACEHOLDER_STATE = 3;
+        $currentPage = BackendUtility::getRecord('pages', $id, 'uid, slug, sys_language_uid, t3ver_state');
+        if (!empty($currentPage) && $currentPage['t3ver_state'] != $PLACEHOLDER_STATE) {
             $languageId = $currentPage['sys_language_uid'];
             $currentSlugSegment = SlugHelper::getLastSlugSegment($currentPage['slug']);
             $parentSlug = SlugHelper::getSlug($targetId, $languageId);
